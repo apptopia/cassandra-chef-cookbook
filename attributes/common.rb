@@ -100,6 +100,7 @@ default[:cassandra] = {
   :auto_snapshot                        => true,
   :column_index_size_in_kb              => 64,
   :in_memory_compaction_limit_in_mb     => 64,
+  :concurrent_compactors                => nil,
   :multithreaded_compaction             => false,
   :compaction_throughput_mb_per_sec     => 16,
   :compaction_preheat_key_cache         => true,
@@ -129,6 +130,11 @@ default[:cassandra] = {
   :enable_assertions => true,
   :internode_compression => 'all', # all, dc, none
   :jmx_server_hostname => false,
+
+  # GC tuning options
+  :gc_survivor_ratio                       => 8,
+  :gc_max_tenuring_threshold               => 1,
+  :gc_cms_initiating_occupancy_fraction    => 75,
 
   # C* 2.1.0
   :broadcast_rpc_address          => node[:ipaddress],
