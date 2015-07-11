@@ -27,7 +27,7 @@ ark node['cassandra']['opscenter']['agent']['install_folder_name'] do
 end
 
 server_ip = node['cassandra']['opscenter']['agent']['server_host']
-unless server_ip && Chef::Config[:solo]
+if server_ip.nil? && !Chef::Config[:solo]
   search_results = search(:node, "roles:#{node['cassandra']['opscenter']['agent']['server_role']}")
   if !search_results.empty?
     server_ip = search_results[0]['ipaddress']
@@ -49,7 +49,6 @@ binary_name = node['cassandra']['opscenter']['agent']['binary_name']
 binary_grep_str = "[#{binary_name[0]}]#{binary_name[1..-1]}"
 
 service 'opscenter-agent' do
-  provider Chef::Provider::Service::Simple
   supports :start => true, :status => true, :stop => true
   start_command "#{agent_dir}/bin/#{binary_name}"
   status_command "ps aux | grep -q '#{binary_grep_str}'"
